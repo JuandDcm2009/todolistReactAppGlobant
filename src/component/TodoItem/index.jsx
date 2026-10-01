@@ -3,6 +3,8 @@ import "./styles.css";
 
 function Todo({id, title, completed, handleRemove, handleUpdate}) {
 
+    // Por medio de las props ejecuta los Metodos del componente Padre.
+
     const actualCompleteValue = useRef(null);
     const [isCompleted, setIsCompleted] = useState(completed);
     const handleDelete = () => handleRemove(id);

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import Todo from "../TodoComponent/index.jsx";
+import Todo from "../TodoItem/index.jsx";
 import "./styles.css"
 
 function TodoList() {
@@ -9,7 +9,7 @@ function TodoList() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const entries = Object.fromEntries(new FormData(formElement.current));
+        const entries = Object.fromEntries(new FormData(formElement.current)); //.current Representa el HTMLElement como tal
         if (!entries["name"]) return;
         const newTask = {name: entries["name"], completed: false, id: crypto.randomUUID()}; 
         const actualTasks = [...todos, newTask];
@@ -22,7 +22,7 @@ function TodoList() {
     }
 
     const handleCompleteUpdate = (taskId, taskCompletedValue) => {
-        const actualTasks = [...todos]; 
+        const actualTasks = [...todos];  // Se guarda dentro de un nuevo Array para que React detecte una nueva Referencia y Actualize el DOM
         actualTasks.forEach((c, i) => {if (c["id"] == taskId) {
             actualTasks[i]["completed"] = taskCompletedValue;
             return;    
@@ -34,7 +34,7 @@ function TodoList() {
     return (<>
         <form action="" onSubmit={handleSubmit} ref={formElement}>
             <label htmlFor="">Task name </label>
-            <input type="text" name="name"/>
+            <input type="text" name="name" value={"Task " + (todos.length + 1)}/> {/* Nombre por defecto Task */}
             <button type="submit">Submit</button>
         </form>
         
@@ -49,10 +49,11 @@ function TodoList() {
                     handleUpdate={handleCompleteUpdate}
             />)}
         </section>
-            
+
         <h1>Completed Tasks</h1>
         <ul className="completedTasks">
-             {todos.filter(c => c["completed"] == true).map(c => <li><h1 key={c["id"] }>{c["name"]}</h1></li>)}
+            {/*// Renderiza solo las tareas completadas (completed: true), Esto con el fin de verificar que el Estado del componente cambie correctamente*/}
+            {todos.filter(c => c["completed"] == true).map(c => <li><h1 key={c["id"] }>{c["name"]}</h1></li>)}
         </ul>
     </>)
 }
